@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Arcade Shooter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="menu">
+        <h1>3D Arcade Shooter</h1>
+        <p id="characterInfo">Loading character...</p>
+        <div style="color: #ccc; margin: 20px 0; text-align: left; display: inline-block;">
+            <h3>Controls:</h3>
+            <p><strong>W/Z:</strong> Move Forward</p>
+            <p><strong>S:</strong> Move Backward</p>
+            <p><strong>A/Q:</strong> Move Left</p>
+            <p><strong>D:</strong> Move Right</p>
+            <p><strong>Mouse:</strong> Look Around (Camera Control)</p>
+            <p><strong>Mouse Click:</strong> Shoot</p>
+            <p><strong>Y:</strong> Toggle Camera Lock</p>
+            <p><strong>ESC:</strong> Unlock Mouse Pointer</p>
+            <p><strong>Space:</strong> Special Ability</p>
+        </div>
+        <button class="game-button" onclick="startGame()">Start Game</button>
+        <button class="game-button" onclick="showCharacterSelection()" style="background: #2196F3; margin-left: 10px;">Choose Character</button>
+    </div>
+    
+    <!-- Character Selection Modal -->
+    <div id="characterSelection" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); padding: 30px; border-radius: 15px; color: white; z-index: 300; max-width: 800px;">
+        <h2>Choose Your Character</h2>
+        <div id="characterGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0;">
+            <!-- Characters will be populated here -->
+        </div>
+        <button class="game-button" onclick="hideCharacterSelection()">Back</button>
+    </div>
+    
+    <div id="gameUI" style="display: none;">
+        <div>Health: <span id="health">100</span></div>
+        <div>Score: <span id="score">0</span></div>
+        <div>Wave: <span id="wave">1</span></div>
+        <div>Enemies: <span id="enemies">3</span></div>
+        <div>Total Kills: <span id="totalKills">0</span></div>
+        <div>Ammo: <span id="ammo">30</span></div>
+    </div>
+    
+    <div id="gameOver" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center; z-index: 200;">
+        <h1>Game Over!</h1>
+        <p>Final Score: <span id="finalScore">0</span></p>
+        <button class="game-button" onclick="location.reload()">Play Again</button>
+    </div>
+    
+    <div id="victory" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center; z-index: 200;">
+        <h1>Victory!</h1>
+        <p>Final Score: <span id="victoryScore">0</span></p>
+        <button class="game-button" onclick="location.reload()">Play Again</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
