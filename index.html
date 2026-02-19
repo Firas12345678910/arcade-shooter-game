@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Arcade Shooter</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+    </div>
+
+    <!-- Main Menu -->
+    <div id="menu" class="main-menu">
+        <div class="menu-container">
+            <div class="game-title">
+                <h1 class="title-main">3D ARCADE</h1>
+                <h1 class="title-sub">SHOOTER</h1>
+                <div class="title-line"></div>
+            </div>
+            
+            <div class="character-display">
+                <div class="character-icon">🎮</div>
+                <p id="characterInfo" class="character-info">Loading character...</p>
+            </div>
+            
+            <div class="controls-panel">
+                <h3 class="controls-title">🎮 CONTROLS</h3>
+                <div class="controls-grid">
+                    <div class="control-item">
+                        <span class="key">W/Z</span>
+                        <span class="action">Move Forward</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key">S</span>
+                        <span class="action">Move Backward</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key">A/Q</span>
+                        <span class="action">Move Left</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key">D</span>
+                        <span class="action">Move Right</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key">🖱️</span>
+                        <span class="action">Look Around</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key">Click</span>
+                        <span class="action">Shoot</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key">Y</span>
+                        <span class="action">Camera Lock</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key">Space</span>
+                        <span class="action">Special Ability</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-buttons">
+                <button class="game-button primary" onclick="startGame()">
+                    <span class="button-icon">▶️</span>
+                    Start Game
+                </button>
+                <button class="game-button secondary" onclick="showCharacterSelection()">
+                    <span class="button-icon">👤</span>
+                    Choose Character
+                </button>
+                <button class="game-button code" onclick="showCodeChamber()">
+                    <span class="button-icon">🔓</span>
+                    Code Chamber
+                </button>
+                <button class="game-button reset" onclick="resetProgress()">
+                    <span class="button-icon">🔄</span>
+                    Reset Progress
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Code Chamber Modal -->
+    <div id="codeChamber" class="code-modal">
+        <div class="code-content">
+            <div class="code-header">
+                <h2 class="code-title">🔓 CODE CHAMBER</h2>
+                <div class="code-subtitle">Enter your secret code to unlock rewards</div>
+            </div>
+            <div class="code-input-area">
+                <input type="text" id="codeInput" class="code-input" placeholder="Enter code here..." maxlength="20">
+                <button class="redeem-button" onclick="redeemCode()">
+                    <span class="redeem-icon">🎁</span>
+                    REDEEM
+                </button>
+            </div>
+            <div id="codeMessage" class="code-message"></div>
+            <div class="code-footer">
+                <button class="game-button secondary" onclick="hideCodeChamber()">
+                    <span class="button-icon">✖️</span>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Character Selection Modal -->
+    <div id="characterSelection" class="character-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🎮 CHOOSE YOUR HERO</h2>
+                <div class="modal-subtitle">Select your character and dominate the battlefield</div>
+            </div>
+            <div id="characterGrid" class="character-grid">
+                <!-- Characters will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button class="game-button secondary" onclick="hideCharacterSelection()">
+                    <span class="button-icon">←</span>
+                    Back to Menu
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Game UI -->
+    <div id="gameUI" class="game-ui">
+        <div class="ui-panel">
+            <div class="ui-item health">
+                <span class="ui-icon">❤️</span>
+                <span class="ui-label">Health</span>
+                <span id="health" class="ui-value">100</span>
+            </div>
+            <div class="ui-item score">
+                <span class="ui-icon">⭐</span>
+                <span class="ui-label">Score</span>
+                <span id="score" class="ui-value">0</span>
+            </div>
+            <div class="ui-item wave">
+                <span class="ui-icon">🌊</span>
+                <span class="ui-label">Wave</span>
+                <span id="wave" class="ui-value">1</span>
+            </div>
+        </div>
+        <div class="ui-panel right">
+            <div class="ui-item enemies">
+                <span class="ui-icon">👾</span>
+                <span class="ui-label">Enemies</span>
+                <span id="enemies" class="ui-value">3</span>
+            </div>
+            <div class="ui-item kills">
+                <span class="ui-icon">💀</span>
+                <span class="ui-label">Kills</span>
+                <span id="totalKills" class="ui-value">0</span>
+            </div>
+            <div class="ui-item ammo">
+                <span class="ui-icon">🔫</span>
+                <span class="ui-label">Ammo</span>
+                <span id="ammo" class="ui-value">30</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Game Over Screen -->
+    <div id="gameOver" class="game-over">
+        <div class="game-over-content">
+            <div class="game-over-title">
+                <h1>GAME OVER</h1>
+                <div class="game-over-line"></div>
+            </div>
+            <div class="final-score">
+                <span class="score-label">Final Score</span>
+                <span id="finalScore" class="score-value">0</span>
+            </div>
+            <div class="game-over-buttons">
+                <button class="game-button primary" onclick="location.reload()">
+                    <span class="button-icon">🔄</span>
+                    Play Again
+                </button>
+                <button class="game-button secondary" onclick="showMenu()">
+                    <span class="button-icon">🏠</span>
+                    Main Menu
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Victory Screen -->
+    <div id="victory" class="victory-screen">
+        <div class="victory-content">
+            <div class="victory-title">
+                <h1>🎉 VICTORY! 🎉</h1>
+                <div class="victory-line"></div>
+            </div>
+            <div class="final-score">
+                <span class="score-label">Final Score</span>
+                <span id="victoryScore" class="score-value">0</span>
+            </div>
+            <div class="victory-buttons">
+                <button class="game-button primary" onclick="location.reload()">
+                    <span class="button-icon">🔄</span>
+                    Play Again
+                </button>
+                <button class="game-button secondary" onclick="showMenu()">
+                    <span class="button-icon">🏠</span>
+                    Main Menu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
