@@ -7,6 +7,21 @@
     box-sizing: border-box;
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .title-main,
+    .title-line,
+    .character-icon,
+    .menu-container,
+    .code-content,
+    .modal-content,
+    .game-over-content,
+    .victory-content,
+    .main-menu::before {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
@@ -14,6 +29,19 @@ body {
     overflow: hidden;
     height: 100vh;
     position: relative;
+}
+
+button {
+    font-family: inherit;
+}
+
+:focus {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 3px solid rgba(0, 255, 255, 0.65);
+    outline-offset: 3px;
 }
 
 /* Animated Background */
@@ -62,9 +90,27 @@ body {
     z-index: 1000;
 }
 
+.main-menu::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(900px 420px at 15% 25%, rgba(0, 255, 255, 0.12), transparent 55%),
+        radial-gradient(800px 380px at 85% 70%, rgba(255, 0, 255, 0.10), transparent 60%),
+        radial-gradient(700px 320px at 40% 90%, rgba(255, 255, 0, 0.08), transparent 55%);
+    animation: menuAurora 10s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes menuAurora {
+    from { transform: translate3d(0, 0, 0) scale(1); filter: hue-rotate(0deg); opacity: 0.9; }
+    to { transform: translate3d(0, -10px, 0) scale(1.02); filter: hue-rotate(25deg); opacity: 1; }
+}
+
 .menu-container {
     text-align: center;
-    max-width: 600px;
+    width: min(680px, 92vw);
+    max-height: 92vh;
     padding: 40px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 20px;
@@ -74,6 +120,23 @@ body {
     animation: slideIn 0.8s ease-out;
     position: relative;
     z-index: 1001;
+    overflow: hidden;
+}
+
+.menu-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.10), rgba(255, 0, 255, 0.08), rgba(255, 255, 0, 0.06));
+    opacity: 0.25;
+    pointer-events: none;
+    mix-blend-mode: screen;
+}
+
+.menu-container > * {
+    position: relative;
+    z-index: 1;
 }
 
 @keyframes slideIn {
@@ -124,6 +187,13 @@ body {
     animation: pulse 2s infinite;
 }
 
+.menu-tagline {
+    margin-top: 10px;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 1rem;
+    letter-spacing: 0.6px;
+}
+
 @keyframes glow {
     from { filter: brightness(1); }
     to { filter: brightness(1.2); }
@@ -168,6 +238,29 @@ body {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 15px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    max-height: 270px;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 255, 255, 0.35) rgba(255, 255, 255, 0.06);
+}
+
+.controls-panel::-webkit-scrollbar {
+    width: 10px;
+}
+
+.controls-panel::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+}
+
+.controls-panel::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 255, 0.28);
+    border-radius: 999px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.controls-panel::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 255, 0.42);
 }
 
 .controls-title {
@@ -222,8 +315,9 @@ body {
 
 /* Menu Buttons */
 .menu-buttons {
-    display: flex;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
     justify-content: center;
     margin-top: 30px;
 }
@@ -244,6 +338,21 @@ body {
     gap: 10px;
     position: relative;
     overflow: hidden;
+    justify-content: center;
+    width: 100%;
+    min-height: 54px;
+}
+
+.game-button:active {
+    transform: translateY(0);
+    filter: brightness(0.98);
+}
+
+.game-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 .game-button::before {
@@ -735,7 +844,7 @@ body {
     }
     
     .menu-buttons {
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
     
     .character-grid {

@@ -42,6 +42,9 @@ let thirdPersonMode = true; // Always use third-person camera like Minecraft/For
 let lastPowerUpSpawn = 0; // Last time power-up was spawned
 let waveSpawnDelay = 0;
 let waveAnnouncementTime = 0;
+let cheatPPressed = false;
+let cheatMPressed = false;
+let cheatPMTriggered = false;
 let enemySpawnPositions = [
     { x: -40, z: -40 }, { x: 0, z: -45 }, { x: 40, z: -40 },
     { x: -45, z: 0 }, { x: 45, z: 0 },
@@ -2415,6 +2418,32 @@ function onWindowResize() {
 }
 
 function onKeyDown(event) {
+    // Cheat: Press P+M during gameplay to gain massive score + jump to wave 9999999
+    const keyLower = typeof event.key === 'string' ? event.key.toLowerCase() : '';
+    if (event.code === 'KeyP' || keyLower === 'p') cheatPPressed = true;
+    if (event.code === 'KeyM' || keyLower === 'm') cheatMPressed = true;
+
+    if (gameRunning && !cheatPMTriggered && cheatPPressed && cheatMPressed) {
+        cheatPMTriggered = true;
+        event.preventDefault();
+        score += 100000000000000000;
+        // Jump to an extreme wave number
+        if (scene && Array.isArray(enemies) && enemies.length > 0) {
+            enemies.forEach(enemy => {
+                try {
+                    scene.remove(enemy);
+                } catch (e) {
+                    // ignore
+                }
+            });
+        }
+        enemies = [];
+        startWave(9999999);
+        updateUI();
+        console.log('CHEAT ACTIVATED (P+M): +100000000000000000 score and wave 9999999');
+        return;
+    }
+
     switch (event.code) {
         case 'KeyZ': // Z for forward (French keyboard)
         case 'KeyW': // W for forward (US keyboard)
@@ -2442,6 +2471,14 @@ function onKeyDown(event) {
 
 function onKeyUp(event) {
     switch (event.code) {
+        case 'KeyP':
+            cheatPPressed = false;
+            cheatPMTriggered = false;
+            break;
+        case 'KeyM':
+            cheatMPressed = false;
+            cheatPMTriggered = false;
+            break;
         case 'KeyZ':
         case 'KeyW':
             moveForward = false;
